@@ -12,7 +12,8 @@
     "electron",
     "profile",
     "variables",
-    "bash_profile"
+    "bash_profile",
+    "byteforge"
   ],
   "engines": {
     "node": ">=14.0.0"
