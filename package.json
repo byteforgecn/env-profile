@@ -1,6 +1,6 @@
 {
   "name": "env-profile",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "An npm package to manage \"environment variables\" for Windows, \"/etc/profile\" for Linux, and \".bash_profile\" for Mac.",
   "main": "index.js",
   "types": "index.d.ts",
