@@ -20,7 +20,7 @@ npm install env-profile
 ## Usage 用法
 
 ```js
-import { getOSType, setUserEnv, setSysEnv, getEnvVariable, backupEnv, restoreEnv } from 'env-profile';
+import { getOSType, setUserEnv, setSysEnv, getEnvVariable, backupEnv, restoreEnv, mergeUserEnv, mergeSysEnv } from 'env-profile';
 
 // 获取操作系统类型 (Get the operating system type)
 const osType = getOSType();
@@ -45,7 +45,27 @@ setSysEnv('KEY', 'VALUE')
             console.error(`无法设置系统环境变量 ${result.key}=${result.value}: ${result.error}`); // Failed to set system environment variable
         }
     });
+// 合并用户环境变量 (Set user environment variable)
+// 给类似"JAVA_HOME"的场景使用 Give a similar scenario USES JAVA "HOME"
+mergeUserEnv('PATH', '%KEY%\\bin')
+    .then((result) => {
+        if (result.success) {
+            console.log(`成功设置用户环境变量 ${result.key}=${result.value}`); // Successfully set user environment variable
+        } else {
+            console.error(`无法设置用户环境变量 ${result.key}=${result.value}: ${result.error}`); // Failed to set user environment variable
+        }
+    });
 
+// 合并系统环境变量 (Set system environment variable) 
+// 给类似"JAVA_HOME"的场景使用 Give a similar scenario USES JAVA "HOME"
+mergeSysEnv('PATH', '%KEY%\\bin')
+    .then((result) => {
+        if (result.success) {
+            console.log(`成功设置系统环境变量 ${result.key}=${result.value}`); // Successfully set system environment variable
+        } else {
+            console.error(`无法设置系统环境变量 ${result.key}=${result.value}: ${result.error}`); // Failed to set system environment variable
+        }
+    });
 // 获取环境变量 (Get environment variable)
 const value = getEnvVariable('KEY');
 console.log('环境变量值:', value); // Value of environment variable
