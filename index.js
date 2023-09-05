@@ -1,13 +1,10 @@
 //#! /usr/bin/env node
 
-const os = require('os');
-const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-
-
 const os = require('os');
 const { exec } = require('child_process');
+// const { execSync } = require('child_process');
 
 module.exports.getOSType = function() {
     return os.type();
