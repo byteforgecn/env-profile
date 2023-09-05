@@ -11,19 +11,19 @@ module.exports.getOSType = function() {
 };
 
 module.exports.setUserEnv = function(key, value) {
-    handlerUserEnv(key,value,false)
+    return handlerUserEnv(key,value,false)
 };
 
 module.exports.setSysEnv = function(key, value) {
-    handlerSysEnv(key,value,false)
+    return handlerSysEnv(key,value,false)
 };
 
 module.exports.mergeUserEnv = function(key, value) {
-    handlerUserEnv(key,value,true)
+    return handlerUserEnv(key,value,true)
 };
 
 module.exports.mergeSysEnv = function(key, value) {
-    handlerSysEnv(key,value,true)
+    return handlerSysEnv(key,value,true)
 };
 
 function handlerUserEnv(key, value,isMerge){
