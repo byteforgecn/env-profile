@@ -5,7 +5,9 @@
 > Do not use while still under development
 >
 > 仍在开发 请勿使用
-
+> 
+> 
+> 开发计划解决path超出1024问题 1、打开Path，点击默认文本（WIN 10），将所有路径备份下来2、新建一个新的环境变量：Path_User 3、将所有系统内置的变量，如C:\WINDOW 和 C:\Program Files 之类的留在Path变量中，分一部分变量放在Path_User中，并且将%Path_User%加入到Path变量中。
 > An npm package to manage "environment variables" for Windows, "/etc/profile" for Linux, and ".bash_profile" for Mac.
 >
 > 用于管理 Windows 的“环境变量”、Linux 的“/etc/profile”和 Mac 的“.bash_profile”的 npm 包。

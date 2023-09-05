@@ -94,9 +94,9 @@ module.exports.restoreEnv = function(backupPath) {
 
 function setWindowsUserEnvVariable(key, value,isMerge) {
     return new Promise((resolve) => {
-        let command = `setx ${key} ${value}`
+        let command = `setx ${key} "${value}"`
         if(isMerge === true){
-            command = `setx ${key} ${value};%${key}%`
+            command = `setx ${key} "${value};%${key}%"`
         }
         exec(command, (error) => {
             if (error) {
@@ -110,9 +110,9 @@ function setWindowsUserEnvVariable(key, value,isMerge) {
 
 function setWindowsSysEnvVariable(key, value,isMerge) {
     return new Promise((resolve) => {
-        let command = `setx /m ${key} ${value}`
+        let command = `setx /m ${key} "${value}"`
         if(isMerge === true){
-            command = `setx /m ${key} ${value};%${key}%`
+            command = `setx /m ${key} "${value};%${key}%"`
         }
         exec(command, (error) => {
             if (error) {
