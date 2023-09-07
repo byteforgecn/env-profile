@@ -4,51 +4,51 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { exec } = require('child_process');
-// const { execSync } = require('child_process');
 
 module.exports.getOSType = function() {
     return os.type();
 };
 
 module.exports.setUserEnv = function(key, value) {
-    return handlerUserEnv(key,value,false)
+    return handlerUserEnv(key, value, false);
 };
 
 module.exports.setSysEnv = function(key, value) {
-    return handlerSysEnv(key,value,false)
+    return handlerSysEnv(key, value, false);
 };
 
 module.exports.mergeUserEnv = function(key, value) {
-    return handlerUserEnv(key,value,true)
+    return handlerUserEnv(key, value, true);
 };
 
 module.exports.mergeSysEnv = function(key, value) {
-    return handlerSysEnv(key,value,true)
+    return handlerSysEnv(key, value, true);
 };
 
-function handlerUserEnv(key, value,isMerge){
+function handlerUserEnv(key, value, isMerge) {
     process.env[key] = value;
     if (os.type() === 'Windows_NT') {
-        return setWindowsUserEnvVariable(key, value,isMerge);
+        return setWindowsUserEnvVariable(key, value, isMerge);
     }
     if (os.type() === 'Darwin') {
-        return setUnixUserEnvVariable(key, value, '~/.bash_profile',isMerge);
+        return setUnixUserEnvVariable(key, value, '~/.bash_profile', isMerge);
     }
     if (os.type() === 'Linux') {
-        return setUnixUserEnvVariable(key, value, '~/.bashrc',isMerge);
+        return setUnixUserEnvVariable(key, value, '~/.bashrc', isMerge);
     }
     return Promise.resolve({ success: false, key, value, error: 'Unsupported OS' });
 }
-function handlerSysEnv(key, value,isMerge){
+
+function handlerSysEnv(key, value, isMerge) {
     process.env[key] = value;
     if (os.type() === 'Windows_NT') {
-        return setWindowsSysEnvVariable(key, value,isMerge);
+        return setWindowsSysEnvVariable(key, value, isMerge);
     }
     if (os.type() === 'Darwin') {
-        return setUnixSysEnvVariable(key, value, '/etc/profile',isMerge);
+        return setUnixSysEnvVariable(key, value, '/etc/profile', isMerge);
     }
     if (os.type() === 'Linux') {
-        return setUnixSysEnvVariable(key, value, '/etc/profile',isMerge);
+        return setUnixSysEnvVariable(key, value, '/etc/profile', isMerge);
     }
     return Promise.resolve({ success: false, key, value, error: 'Unsupported OS' });
 }
@@ -61,7 +61,6 @@ module.exports.backupEnv = function(backupPath) {
     if (!backupPath) {
         backupPath = path.join(os.homedir(), '.env-profile_backup.json');
     }
-    // const backupPath = path.join(os.homedir(), '.env-profile_backup.json');
     const backup = { ...process.env };
 
     return new Promise((resolve, reject) => {
@@ -92,13 +91,13 @@ module.exports.restoreEnv = function(backupPath) {
     });
 };
 
-function setWindowsUserEnvVariable(key, value,isMerge) {
+function setWindowsUserEnvVariable(key, value, isMerge) {
     return new Promise((resolve) => {
-        let command = `setx ${key} "${value}"`
-        if(isMerge === true){
-            command = `setx ${key} "${value};%${key}%"`
+        let command = `reg add HKCU\\Environment /v ${key} /d "${value}" /f`
+        if (isMerge === true) {
+            command = `reg add HKCU\\Environment /v ${key} /d "${value};%${key}%" /f`
         }
-        exec(command, (error) => {
+        exec(command, { shell: 'cmd.exe' }, (error) => {
             if (error) {
                 resolve({ success: false, key, value, error: error.message });
             } else {
@@ -108,13 +107,13 @@ function setWindowsUserEnvVariable(key, value,isMerge) {
     });
 }
 
-function setWindowsSysEnvVariable(key, value,isMerge) {
+function setWindowsSysEnvVariable(key, value, isMerge) {
     return new Promise((resolve) => {
-        let command = `setx /m ${key} "${value}"`
-        if(isMerge === true){
-            command = `setx /m ${key} "${value};%${key}%"`
+        let command = `reg add HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment /v ${key} /d "${value}" /f`
+        if (isMerge === true) {
+            command = `reg add HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment /v ${key} /d "${value};%${key}%" /f`
         }
-        exec(command, (error) => {
+        exec(command, { shell: 'cmd.exe' }, (error) => {
             if (error) {
                 resolve({ success: false, key, value, error: error.message });
             } else {
@@ -123,8 +122,9 @@ function setWindowsSysEnvVariable(key, value,isMerge) {
         });
     });
 }
+// setWindowsUserEnvVariable('PATH1', 'C:\\path\\to\\jdk', false).then(r => console.log(r))
 
-function setUnixUserEnvVariable(key, value, configFile,isMerge) {
+function setUnixUserEnvVariable(key, value, configFile, isMerge) {
     return new Promise((resolve) => {
         let command = `echo 'export ${key}=${value}' >> ${configFile}`
         if(isMerge === true){
@@ -140,10 +140,10 @@ function setUnixUserEnvVariable(key, value, configFile,isMerge) {
     });
 }
 
-function setUnixSysEnvVariable(key, value, configFile,isMerge) {
+function setUnixSysEnvVariable(key, value, configFile, isMerge) {
     return new Promise((resolve) => {
         let command = `echo 'export ${key}=${value}' | sudo tee -a ${configFile}`
-        if(isMerge === true){
+        if (isMerge === true) {
             command = `echo 'export ${key}=${value}:$${key}' | sudo tee -a ${configFile}`
         }
         exec(command, (error) => {
