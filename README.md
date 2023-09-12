@@ -2,11 +2,15 @@
 
 [![NPM](https://nodei.co/npm/env-profile.png?downloads=true&stars=true)](https://www.npmjs.com/package/env-profile)
 
-> Do not use while still under development
+> Do not use while still under development. Please back up your environment variables file before testing (windows setx is really hard to use)
 >
-> 仍在开发 请勿使用
+> Do not use while still under development. Please back up your environment variables file before testing (windows setx is really hard to use)
 >
-> 开发计划解决path超出1024问题 1、打开Path，将所有路径备份下来2、新建一个新的环境变量：Path_User 3、我们操作变量就放在Path_User中，并且将%Path_User%加入到Path变量中。
+> 仍在开发 请勿使用. 测试前请备份你的环境变量文件(windows的setx真难用)
+>
+> 仍在开发 请勿使用. 测试前请备份你的环境变量文件(windows的setx真难用)
+>
+> ---
 > 
 > 期待你的贡献, 欢迎所有人提交代码PR
 > 
